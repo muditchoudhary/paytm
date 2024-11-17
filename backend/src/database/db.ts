@@ -9,6 +9,10 @@ export interface IUser extends Document {
   password: string;
 }
 
+export interface IAccount extends Document {
+  userId: string;
+  balance: number;
+}
 const userSchema = new Schema({
   firstName: {
     type: String,
@@ -42,10 +46,17 @@ const userSchema = new Schema({
     type: String,
     required: true,
     minLength: 6,
-  }
+  },
 }, { timestamps: true });
 
+const accoutSchema = new Schema({
+  userId: {type: Schema.Types.ObjectId, ref: "User", required: true},
+  balance: {type: Number, required: true},
+
+}, {timestamps: true});
+
 export const User = mongoose.model<IUser>("User", userSchema);
+export const Account = mongoose.model<IAccount>("Account", accoutSchema);
 
 mongoose.connect(MONGO_DB_URI).then(() => {
   return console.log("Connected to MongoDB");
